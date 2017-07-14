@@ -1,0 +1,85 @@
+##################################################################################################################
+#                                     pacman packages                                                            #
+##################################################################################################################
+
+pacman_packages=()
+
+# Install linux headers
+pacman_packages+=( linux-headers )
+
+# Install X essentials
+pacman_packages+=( xorg-server xorg-apps xorg-xinit dbus xsel acpi xbindkeys )
+
+# Install font essentials
+pacman_packages+=( cairo fontconfig freetype2 )
+
+# Install linux fonts
+pacman_packages+=( ttf-dejavu ttf-liberation ttf-inconsolata ttf-anonymous-pro ttf-ubuntu-font-family )
+
+# Install google fonts
+pacman_packages+=( ttf-croscore ttf-droid ttf-roboto )
+
+# Install adobe fonts
+pacman_packages+=( adobe-source-code-pro-fonts adobe-source-sans-pro-fonts adobe-source-serif-pro-fonts )
+
+# Install bitmap fonts
+aur_packages+=( dina-font terminus-font tamsyn-font artwiz-fonts )
+
+# Install admin tools
+pacman_packages+=( git zsh grml-zsh-config tmux openssh ntfs-3g sysstat ripgrep )
+
+# Install network tools
+pacman_packages+=( ifplugd wpa_actiond wpa_supplicant syncthing )
+
+# Install window manager
+pacman_packages+=( slock dmenu libnotify dunst numix-gtk-theme )
+
+# Install dev tools
+pacman_packages+=( vim emacs stow )
+
+# Work tools
+pacman_packages+=( nodejs npm rustup )
+
+# Install requirements for pacaur
+pacman_packages+=( sudo expac )
+
+# Install audio
+pacman_packages+=( alsa-utils pulseaudio )
+
+# Install useful apps
+pacman_packages+=( keepass mpv vlc gimp firefox chromium scribus rtorrent weechat scrot feh )
+pacman_packages+=( libreoffice-fresh )
+
+#!NOT NOW# pacman --noconfirm --needed -S  ${pacman_packages[@]}
+
+##################################################################################################################
+
+
+##################################################################################################################
+#                                     AUR packages                                                            #
+##################################################################################################################
+
+
+aur_packages=()
+
+# Install utilities
+aur_packages+=( compton-git redshift-minimal )
+
+# Work tools
+aur_packages+=( editorconfig-core-c )
+
+# Install more fonts
+# aur_packages+=( ttf-lato ttf-paratype ttf-clear-sans ttf-fira-mono ttf-monaco )
+
+# Install theme
+aur_packages+=( moka-icon-theme-git )
+
+# Install others
+aur_packages+=( libreoffice-extension-languagetool )
+
+#!NOT NOW# pacaur -S --noconfirm --noedit --needed ${aur_packages[@]}
+
+##################################################################################################################
+
+
+# vim:ts=2 sw=2 et
