@@ -17,7 +17,7 @@ Groups=(wheel storage autologin)
 
 Mirror="Worldwide"
 TimeZone="Asia/Dhaka"
-Locale="en_GB.UTF-8"
+Locale="en_GB"
 KeyMap="us"
 VirtualBox="guest"
 Services=()
@@ -256,7 +256,7 @@ all_frm_spfc_cntry
 #                     Install Base System And configure fstab                 #
 ###############################################################################
 
-pacstrap /mnt base base-devel
+pacstrap /mnt base base-devel || exit
 
 genfstab -U -p /mnt >> /mnt/etc/fstab
 echo "tmpfs                                   	/tmp    	tmpfs   	defaults,noatime,mode=1777	0 0" >> /mnt/etc/fstab
@@ -265,7 +265,7 @@ echo "tmpfs                                   	/tmp    	tmpfs   	defaults,noatim
 #                     Copy Previous stuff setup in runtime                    #
 ###############################################################################
 
-#cp /etc/pacman.d/mirrorlist /mnt/etc/pacman.d/mirrorlist
+#cp /etc/pacman.d/mirrorlist /mnt/etc/pacman.d/mirrorlist #autocopied
 ## Export Previous Values to Installed system ** NEEDED FOR groups
 # ###IGNORED FOR NOW###
 
@@ -321,12 +321,12 @@ EOF
 
 # Locale Config
 #
-sed -i 's/^#en_GB\.UTF/en_GB\.UTF/' /etc/locale.gen
+sed -i "/$Locale.UTF/s/^#//" /etc/locale.gen
 sed -i 's/^#en_US\.UTF/en_US\.UTF/' /etc/locale.gen
 
 locale-gen
-echo LANG=$Locale > /etc/locale.conf
-echo LANGUAGE=en_GB:en_US >> /etc/locale.conf
+echo LANG=$Locale.UTF-8 > /etc/locale.conf
+echo LANGUAGE=$Locale:en_US >> /etc/locale.conf
 echo LC_COLLATE=C >> /etc/locale.conf
 
 
@@ -410,13 +410,13 @@ rm -rf building
 pacaur -S --noconfirm --noedit --needed ${Packages[@]}
 
 # add needed groups
-for GroupName in "${Groups[@]}";
+for GroupName in ${Groups[@]}
 do
   sudo groupadd -r \$GroupName
 done
 
 # add user to groups
-sudo usermod -a -G ${GroupsJoined[@]} $UserName
+sudo usermod -a -G ${GroupsJoined} $UserName
 
 ## if virtualbox setup related things , possible inputs are "host","guest","" (empty string)
 if [[ !  -z  $VirtualBox ]];then
@@ -429,7 +429,7 @@ if [[ !  -z  $VirtualBox ]];then
   fi
 fi
 sudo systemctl enable ${Services[@]}
-rm -f /home/$UserName/.bash_profile
+mv /home/$UserName/.bash_profile /home/$UserName/.bash_profile.bak
 sudo rm /etc/sudoers.d/99_wheel_group_nopass
 069StringSecond
 
