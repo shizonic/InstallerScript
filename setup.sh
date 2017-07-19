@@ -2,7 +2,6 @@
 
 ####### TODO $$$$$
 #### Cleanup Script
-### Add checking if packages exist
 ## Add Bash Scrict mode
 ## Partition_Manipulation to use menu
 ####### TODO $$$$$
@@ -31,9 +30,10 @@ SWAP_PART=/dev/sda4
 DHCPOnCurrentInterface="yes"
 BasePackages=(intel-ucode git)
 Packages=(neovim iw wpa_supplicant dialog wget net-tools)
-Packages+=(yaourt)
+Packages+=(sublime-text-dev)
+AsDeps=()
 ## OR you can define these values in the following file for easy reading
-# source definitions.conf
+# source defs
 
 ###############################################################################
 #                           Redefine                                          #
@@ -75,6 +75,7 @@ if [ "$DHCPOnCurrentInterface" == "yes" ]; then
   dhcpService="dhcpcd@$tmp"
   Services+=( $dhcpService )
 fi
+
 
 # ( interactive )
 ## Hostname 
@@ -280,12 +281,6 @@ arch-chroot /mnt << 069StringFirst
 # Set hostname
 echo "$HostName" > /etc/hostname
 
-# setup hosts file correctly
-#echo "127.0.1.1	$HostName.localdomain	$HostName" >> /etc/hosts
-sed -i "s/localdomain	localhost/& $HostName/" /etc/hosts
-sed -i "/^::1/a 127.0.1.1	$HostName.localdomain	$HostName" /etc/hosts
-
-
 # pacman.conf modify (enable multilib)
 sed -i /etc/pacman.conf \
   -e '/\[multilib\]/{s/^#//;n;s/^#//}' \
@@ -331,7 +326,7 @@ echo LC_COLLATE=C >> /etc/locale.conf
 
 
 # Set keymap
-#echo "KEYMAP=$KeyMap" > /etc/vconsole.conf
+echo "KEYMAP=$KeyMap" > /etc/vconsole.conf
 
 
 # TimeZone config & sync hwclock to utc
@@ -361,9 +356,34 @@ cat > /etc/systemd/system/getty@tty1.service.d/override.conf <<EOF
 ExecStart=
 ExecStart=-/usr/bin/agetty --autologin $UserName --noclear %I \$TERM
 EOF
-
 069StringFirst
 
+
+
+# setup hosts file correctly
+Tabbed=$'\t'
+sed -i "s/localdomain${Tabbed}localhost/&${Tabbed}${HostName}/" /mnt/etc/hosts
+sed -i "/^::1/a 127.0.1.1${Tabbed}${HostName}.localdomain${Tabbed}${HostName}" /mnt/etc/hosts
+
+
+
+## test if any package missing , if so remove from list
+function FindMissingsFromDefined {
+
+# First enable multilib and update database from archiso
+sed -i /etc/pacman.conf -e '/\[multilib\]/{s/^#//;n;s/^#//}'
+pacman -Syy
+
+# list missing packages
+Missings=( $(comm -23 <(echo "${Packages[@]}" | tr ' ' '\n' | sort -u) <(sort -u <(curl -s https://aur.archlinux.org/packages.gz | gunzip) <(pacman -Ssq) <(pacman -Sgq))) )
+[[ ${#Missings[@]} -ne 0 ]] && printf "%s\n" "${Missings[@]}" > /mnt/home/$UserName/missing_packages.txt
+
+# Deduct missing packages
+Packages=( $(comm -23 <(echo "${Packages[@]}" | tr ' ' '\n' | sort -u) <(echo "${Missings[@]}" | tr ' ' '\n' | sort -u)) )
+AsDeps=( $(comm -23 <(echo "${AsDeps[@]}" | tr ' ' '\n' | sort -u) <(echo "${Missings[@]}" | tr ' ' '\n' | sort -u)) )
+}
+
+FindMissingsFromDefined
 
 # Launch scriopt as soon as logged in as user
 touch /mnt/home/$UserName/.bash_profile
@@ -384,6 +404,7 @@ cd /home/$UserName
 mkdir .gnupg
 echo "keyserver-options auto-key-retrieve" >> .gnupg/gpg.conf
 echo "keyserver hkp://pgp.mit.edu" >> .gnupg/gpg.conf
+chmod -R go-rwx ~/.gnupg
 
 
 # install AUR helper
@@ -406,8 +427,11 @@ makepkg -sir --noconfirm
 cd ../..
 rm -rf building
 
-#install AUR packages
+# install packages
 pacaur -S --noconfirm --noedit --needed ${Packages[@]}
+
+# Mark dependency of  packages
+sudo pacman -D --asdeps --noconfirm ${AsDeps[@]}
 
 # add needed groups
 for GroupName in ${Groups[@]}
@@ -419,20 +443,21 @@ done
 sudo usermod -a -G ${GroupsJoined} $UserName
 
 ## if virtualbox setup related things , possible inputs are "host","guest","" (empty string)
-if [[ !  -z  $VirtualBox ]];then
-  if [ "$VirtualBox" == "guest" ]; then
-    sudo pacman -S --noconfirm virtualbox-guest-utils virtualbox-guest-modules-arch
-    sudo systemctl enable vboxservice
-  elif [ "$VirtualBox" == "host" ]; then
-    sudo pacman -S --noconfirm virtualbox-host-modules-arch virtualbox-guest-iso
-    sudo gpasswd -a $UserName vboxusers
-  fi
+if [ "$VirtualBox" == "guest" ]; then
+	sudo pacman -S --noconfirm virtualbox-guest-utils virtualbox-guest-modules-arch
+	sudo systemctl enable vboxservice
+	# start clipboard handling with VBoxClient-all
+elif [ "$VirtualBox" == "host" ]; then
+	sudo pacman -S --noconfirm virtualbox-host-modules-arch virtualbox-guest-iso
+	sudo gpasswd -a $UserName vboxusers
 fi
 sudo systemctl enable ${Services[@]}
 mv /home/$UserName/.bash_profile /home/$UserName/.bash_profile.bak
 sudo rm /etc/sudoers.d/99_wheel_group_nopass
 069StringSecond
 
+# unmount
+umount -R /mnt
 echo "rebooting in 5 seconds"
 sleep 5 && systemctl reboot
 

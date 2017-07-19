@@ -1,0 +1,420 @@
+# UserName Following
+UserName="burhan"
+
+# HostName Following
+HostName="Extreme"
+
+# Groups for the new created user ; separated with space
+Groups=(wheel)
+
+# Mirror country
+Mirror="Worldwide"
+
+# Current TimeZone
+TimeZone="Asia/Dhaka"
+
+# Primary Locale to use
+Locale="en_GB"
+
+# Your keyboard layout
+KeyMap="us"
+
+# Configure VirtualBox related settings
+# Possible options "guest", "host" , "" (null)
+# guest to Install needed settings for arch inside VirtualBox
+# Host to Install needed settings for arch to run VirtualBox
+# "" to skip this option
+VirtualBox="guest"
+
+#Services to enable after installation , separated with space 
+Services=(  )
+
+# The Original disk on which partition is to be placed
+Disk=/dev/sda
+
+# Define what and where
+ESP_PART=/dev/sda1
+ROOT_PART=/dev/sda2
+HOME_PART=/dev/sda3
+SWAP_PART=/dev/sda4
+
+# If enabled will search the interface that run internet in the archiso 
+# and will enable dhcp on Installed system
+# should work with ethernet through router
+DHCPOnCurrentInterface="yes"
+
+# Very basic packages
+BasePackages=( intel-ucode git )
+
+# List of packages to be Installed either from repo or AUR
+Packages=()
+# Mark These Packages as "Installed as Dependency of other program"
+AsDeps=()
+
+
+##################################################################################################################
+#                                     pacman packages                                                            #
+##################################################################################################################
+
+
+# linux headers( respective to linux kernel, needed for packing dkms module)
+Packages+=( linux-headers )
+
+# X essentials
+Packages+=( xorg-server xorg-apps xorg-xinit xterm)
+AsDeps+=( libglvnd ) #Other options nvidia-{304,340}xx-utils
+
+# font essentials
+AsDeps+=( cairo )
+
+# linux fonts
+Packages+=( ttf-dejavu ttf-liberation ttf-inconsolata ttf-anonymous-pro ttf-ubuntu-font-family )
+
+# google fonts
+#Packages+=( ttf-croscore ttf-droid ttf-roboto )
+
+# adobe fonts
+#Packages+=( adobe-source-code-pro-fonts adobe-source-sans-pro-fonts adobe-source-serif-pro-fonts )
+
+# bitmap fonts
+#Packages+=( dina-font terminus-font tamsyn-font artwiz-fonts )
+
+# Network Tools
+Packages+=( iw wpa_supplicant dialog wget net-tools)
+#Packages+=( ifplugd syncthing )
+
+# Terminal
+Packages+=( st-patched-git rxvt-unicode )
+#Packages+=( termite terminology )
+
+
+# Desktop Environment / window manager
+Packages+=( i3-gaps  )
+#Packages+=( cinnamon )
+#Packages+=( xfce4 xfce4-goodies )
+#Packages+=( gnome gnome-extra )
+#Packages+=( plasma kde-application )
+#Packages+=( mate mate-extra )
+#Packages+=( lxde )
+#Packages+=( lxqt )
+
+
+# Apllication Launcher
+Packages+=( dmenu rofi xfce4-appfinder )
+
+
+
+# Side packages for WM
+Packages+=( polybar ) #Install Build Dependency
+#Packages+=( i3status )
+Packages+=( xautolock dunst )
+
+# Clipboard Handler
+Packages+=( parcellite xclip xsel autocutsel )
+
+# Text Editor
+Packages+=( neovim sublime-text-dev gedit )
+Packages+=( python-neovim python2-neovim ) # neovim with python support
+#Packages+=( gvim )
+
+
+
+# Web Browsers
+Packages+=( w3m elinks )
+Packages+=( firefox google-chrome )
+#Packages+=( pepper-flash flashplugin ) # Flash: PPAPI and NPAPI respectively
+#Packages+=( qutebrowser qupzilla )
+#Packages+=( chromium opera vivaldi brave-bin )
+
+
+
+# Downloader/File Sharing
+Packages+=( wget aria2 uget )
+#Packages+=( openssh )
+
+# Torrent Clinets
+Packages+=( transmission-cli qbittorrent )
+#Packages+=( deluge vuze tixati vuze-extreme-mod )
+
+
+# Pastebin clients
+Packages+=( gist )
+#Packages+=( ix wgetpaste pastebinit )
+
+# email clients
+# Packages+=( mutt evolution thunderbird seamonkey )
+
+# IRC clients
+Packages+=( irssi hexchat )
+
+
+# Multi-protocol clients : VoIP , etc
+#Packages+=( matrix-synapse skypeforlinux discord )
+
+# News aggregators /RSS
+#Packages+=( newsbeuter liferea quiterss ) #FIND GOOD RSS READER
+
+
+#CODECS
+#
+
+# Image viewers
+Packages+=( sxiv viewnior )
+Packages+=( pqiv-git )
+#Packages+=( eog gwenview geeqie shotwell  mirage )
+
+# Image Editor
+Packages+=( imagemagick gimp )
+#Packages+=( krita pinta )
+
+# audio
+Packages+=( alsa-utils pulseaudio-alsa pulseaudio )
+
+# Audio Players
+Packages+=( mpd mpc ncmpcpp )
+#Packages+=( mopidy mopidy-spotify )
+#Packages+=( spotify deadbeef rhythmbox )
+
+
+# Video players
+Packages+=( mpv ) # Add gst plugins to list
+#Packages+=( vlc smplayer smplayer-skins smplayer-themes )
+AsDeps+=( ffmpeg )
+Packages+=( libva-intel-driver ) # Intel HW Decoding
+
+
+# Gstreamer
+Packages+=( gst-libav gst-plugins-bad gst-plugins-good gst-plugins-ugly )
+Packages+=( gstreamer-vaapi )
+
+
+
+# Subtitle
+Packages+=( subdl subliminal )
+
+# File managers
+Packages+=( ranger nemo )
+
+# Trash Management
+Packages+=( trash-cli )
+
+# Archiving and compression tools
+Packages+=( p7zip unzip nemo-fileroller )
+AsDeps+=( libunrar file-roller )
+#Packages+=( rar )
+
+
+# Comparison, diff, merge
+Packages+=( colordiff meld )
+
+# Batch renamers
+Packages+=( gprename )
+#Packages+=( pyrenamer )
+
+# File Finders
+Packages+=( catfish mlocate )
+#Packages+=( tracker fsearch-git angrysearch )
+
+# Searching within files (not Filename only)
+# Packages+=( ripgrep )
+
+
+# Disk cleaning
+Packages+=( rmlint )
+#Packages+=( bleachbit )
+
+
+# Disk usage display
+Packages+=( baobab )
+#Packages+=( filelight )
+
+
+# System monitoring
+Packages+=( htop gnome-system-monitor )
+#Packages+=( conky sysstat )
+
+
+# System information viewers
+Packages+=( neofetch )
+#Packages+=( screenfetch hardinfo )
+
+
+# Office
+Packages+=( libreoffice-fresh )
+#Packages+=( wps-office )
+
+# LibreOffice Spelling Tools
+Packages+=( hunspell-en hunspell-en_GB hyphen-en libmythes mythes-en libreoffice-fresh-en-GB )
+
+
+# E-book applications
+Packages+=( calibre )
+#Packages+=( fbreader )
+
+# PDF Reader
+Packages+=( evince )
+#Packages+=( mupdf okular zathura zathura-pdf-mupdf zathura-djvu )
+
+# Comic book
+Packages+=( mcomix )
+
+
+# Note Organiser
+Packages+=( gnote )
+#Packages+=( keepnote )
+
+
+# Character Selector
+Packages+=( gucharmap )
+
+
+
+# Screen lockers
+Packages+=( i3lock-color-git )
+#Packages+=( i3lock cinnamon-screensaver )
+
+
+
+# Calculator
+Packages+=( bc speedcrunch )
+
+
+# Time management
+Packages+=( gnome-clocks gsimplecal )
+#Packages+=(  gnome-calendar orage )
+
+
+# Recipe management
+#Packages+=( gnome-recipes gourmet )
+
+
+### Terminal multiplexers
+Packages+=( tmux )
+#Packages+=( screen )
+
+# composite managers / Compositor
+Packages+=( compton )
+#Packages+=( xcompmgr )
+
+
+# Wallpaper Setter
+Packages+=( feh variety )
+#Packages+=( nitrogen )
+
+
+
+# ScreenShot Utility
+Packages+=( maim )
+#AsDeps+=( ffmpeg )
+#Packages+=( scrot )
+
+
+# Battery, power, thermal Tools
+Packages+=( acpi acpid )
+
+
+# Youtube Handler
+Packages+=( youtube-dl youtube-viewer )
+
+# ytviewer optional deps
+Packages+=( gtk2-perl perl-file-sharedir perl-json-xs perl-term-readline-gnu perl-text-charwidth )
+
+
+# Arch Tools
+Packages+=( asp pacgraph pkgfile pkgstats )
+
+
+# Text To Voice
+#Packages+=( espeak festival festival-english festival-us speech-dispatcher )
+
+# Encoding Codecs
+Packages+=( libfdk-aac libx264 )
+
+
+# Display Manager
+Packages+=( lightdm-gtk-greeter )
+AsDeps+=( lightdm )
+Services+=( lightdm )
+
+#-------------------
+# Screen Cast
+# Vidoe Editor
+# Audio Editor
+# Video DRIVER ***
+#-------------------
+
+# Developer Tools/Editor
+#Packages+=( brackets-bin atom codeblocks netbeans eclipse-java qtcreator pycharm-community )
+#Packages+=( geany intellij-idea-community-edition monodevelop eclipse-cpp eclipse-php )
+
+# dot files Handler
+# Packages+=( stow )
+
+# Work tools
+#Packages+=( nodejs npm rustup )
+
+
+# Wallpaper
+#Packages+=( archlinux-wallpaper gnome-backgrounds )
+
+
+
+# Mounting inside File Manager
+Packages+=( gvfs-afc gvfs-mtp )
+
+
+# Thumbnail previews
+Packages+=( ffmpegthumbnailer )
+
+
+# Multilib Packages
+Packages+=( lib32-gnutls lib32-libxmu lib32-openssl-1.0 )
+
+# JAVA
+Packages+=( jdk8-openjdk )
+
+
+
+# Extra Linux Kernel
+#Packages+=( linux-zen linux-zen-headers )
+
+
+
+# Wine
+Packages+=( wine-mono wine-staging wine_gecko winetricks )
+
+# ZSH
+Packages+=( zsh zsh-completions zsh-syntax-highlighting )
+#Packages+=( grml-zsh-config oh-my-zsh-git )
+
+
+# theme
+Packages+=( breeze-gtk numix-gtk-theme )
+Packages+=( faience-icon-theme flattr-icon-theme )
+
+
+
+# Other/ Misc Tools
+Packages+=( zenity bash-completion )
+Packages+=( cmatrix tree scanmem mediainfo mediainfo-gui )
+Packages+=( cronie dconf-editor gksu gnome-disk-utility )
+Packages+=( gnome-keyring gparted lxappearance wmctrl )
+Packages+=( xdg-user-dirs ntfs-3g polkit-gnome redshift )
+#Packages+=( rsync rxvt-unicode-cvs-patched-wideglyphs )
+#Packages+=( shellcheck-static )
+Services+=( cronie )
+
+
+
+
+
+
+#                                 #
+# GREAT REFERENCE FOR APPLICATION:
+# https://wiki.archlinux.org/index.php/List_of_applications
+#                                 #
+
+tmp=( "${Packages[@]}" "${AsDeps[@]}" )
+Packages=${tmp[@]}
+
+# vim:ts=2 sw=2 et

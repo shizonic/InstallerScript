@@ -14,7 +14,6 @@ calibre
 catfish
 cmatrix
 compton
-connman
 cower
 create_ap
 cronie
@@ -23,10 +22,8 @@ dialog
 dmenu
 dosfstools
 dunst
-enlightenment
 espeak
 evince
-extundelete
 faience-icon-theme
 feh
 festival
@@ -85,7 +82,6 @@ linux-ck-haswell-headers
 linux-zen
 linux-zen-headers
 lostfiles
-lsb-release
 lxappearance
 macchanger
 maim
@@ -139,11 +135,10 @@ smplayer-themes
 smtube
 speech-dispatcher
 speedcrunch
-st-patched
+st-patched-git
 sublime-text-dev
 subliminal
 sxiv
-terminology
 tmux
 trash-cli
 tree
